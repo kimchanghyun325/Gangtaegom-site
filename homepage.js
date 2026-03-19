@@ -187,4 +187,67 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // ---- Game Media Slider ----
+  const gameTrack = document.getElementById('game-slider-track');
+  const gameDots = document.getElementById('game-slider-dots');
+  const gamePrev = document.querySelector('.game-slider-prev');
+  const gameNext = document.querySelector('.game-slider-next');
+
+  if (gameTrack && gameDots) {
+    const slides = gameTrack.querySelectorAll('.game-slide');
+    let currentSlide = 0;
+
+    // Create dot indicators
+    slides.forEach((_, i) => {
+      const dot = document.createElement('button');
+      dot.className = 'game-slider-dot' + (i === 0 ? ' active' : '');
+      dot.setAttribute('aria-label', `슬라이드 ${i + 1}`);
+      dot.addEventListener('click', () => goToSlide(i));
+      gameDots.appendChild(dot);
+    });
+
+    function goToSlide(index) {
+      if (index < 0) index = slides.length - 1;
+      if (index >= slides.length) index = 0;
+      currentSlide = index;
+      gameTrack.style.transform = `translateX(-${currentSlide * 100}%)`;
+      // Update dots
+      gameDots.querySelectorAll('.game-slider-dot').forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentSlide);
+      });
+    }
+
+    gamePrev?.addEventListener('click', () => goToSlide(currentSlide - 1));
+    gameNext?.addEventListener('click', () => goToSlide(currentSlide + 1));
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      const gameSection = document.getElementById('game');
+      if (!gameSection) return;
+      const rect = gameSection.getBoundingClientRect();
+      const inView = rect.top < window.innerHeight && rect.bottom > 0;
+      if (!inView) return;
+      if (e.key === 'ArrowLeft') goToSlide(currentSlide - 1);
+      if (e.key === 'ArrowRight') goToSlide(currentSlide + 1);
+    });
+
+    // Touch swipe support
+    let touchStartX = 0;
+    let touchEndX = 0;
+    const viewport = gameTrack.parentElement;
+
+    viewport.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    viewport.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      const diff = touchStartX - touchEndX;
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) goToSlide(currentSlide + 1);
+        else goToSlide(currentSlide - 1);
+      }
+    }, { passive: true });
+  }
+
 });

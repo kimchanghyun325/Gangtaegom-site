@@ -50,7 +50,9 @@
 }
 
 /* --- Reset & Base --- */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -84,7 +86,8 @@ img {
   display: block;
 }
 
-ul, ol {
+ul,
+ol {
   list-style: none;
 }
 
@@ -423,6 +426,158 @@ ul, ol {
   margin: 0 auto;
 }
 
+/* ============================================
+   GAME MEDIA SLIDER
+   ============================================ */
+.game-slider-container {
+  position: relative;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.game-slider-viewport {
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-medium);
+  background: #1a1a1a;
+}
+
+.game-slider-track {
+  display: flex;
+  transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.game-slide {
+  flex: 0 0 100%;
+  min-width: 100%;
+  position: relative;
+}
+
+.game-slide img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+}
+
+.game-slide--video .game-slide-video-wrapper {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%;
+  /* 16:9 */
+  height: 0;
+  overflow: hidden;
+}
+
+.game-slide--video .game-slide-video-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.game-slide-caption {
+  padding: 14px 20px;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.game-slide-caption p {
+  color: #fff;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  text-align: center;
+  margin: 0;
+}
+
+/* Slider Navigation Buttons */
+.game-slider-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid var(--border-medium);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-medium);
+  transition: all var(--transition-fast);
+  z-index: 10;
+}
+
+.game-slider-btn:hover {
+  background: var(--accent-coral);
+  color: #fff;
+  border-color: var(--accent-coral);
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-50%) scale(1.08);
+}
+
+.game-slider-prev {
+  left: -24px;
+}
+
+.game-slider-next {
+  right: -24px;
+}
+
+/* Slider Dot Indicators */
+.game-slider-dots {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.game-slider-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: none;
+  background: var(--border-medium);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  padding: 0;
+}
+
+.game-slider-dot:hover {
+  background: var(--accent-coral-light);
+  transform: scale(1.2);
+}
+
+.game-slider-dot.active {
+  background: var(--accent-coral);
+  width: 28px;
+  border-radius: 5px;
+}
+
+/* Game Intro Text */
+.game-intro-text {
+  text-align: center;
+  max-width: 720px;
+  margin: 36px auto 0;
+}
+
+.game-intro-text p {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  line-height: 1.85;
+}
+
 /* Team Slider */
 .team-slider-wrapper {
   position: relative;
@@ -508,16 +663,30 @@ ul, ol {
   right: -22px;
 }
 
+/* --- 팀원 아바타 영역 수정 --- */
 .team-avatar {
   width: 80px;
   height: 80px;
   border-radius: 50%;
+  /* 배경 그라데이션은 이미지가 없을 때를 대비해 유지하거나 삭제 가능 */
   background: linear-gradient(135deg, var(--accent-coral-light), var(--accent-warm-yellow));
   margin: 0 auto 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2rem;
+  overflow: hidden;
+  /* ★ 중요: 이미지가 원 밖으로 나가지 않게 함 */
+  border: 2px solid var(--border-light);
+  /* 선택사항: 테두리 추가 */
+}
+
+/* --- 추가: 아바타 안에 들어갈 이미지 스타일 --- */
+.team-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* ★ 중요: 이미지 비율을 유지하며 꽉 채움 */
+  display: block;
 }
 
 .team-name {
@@ -570,7 +739,8 @@ ul, ol {
   gap: 8px;
 }
 
-.policy-block p, .policy-block li {
+.policy-block p,
+.policy-block li {
   font-size: 0.95rem;
   color: var(--text-secondary);
   line-height: 1.8;
@@ -741,9 +911,11 @@ ul, ol {
   .mobile-menu-btn.active span:nth-child(1) {
     transform: rotate(45deg) translate(5px, 5px);
   }
+
   .mobile-menu-btn.active span:nth-child(2) {
     opacity: 0;
   }
+
   .mobile-menu-btn.active span:nth-child(3) {
     transform: rotate(-45deg) translate(5px, -5px);
   }
@@ -762,6 +934,23 @@ ul, ol {
 
   .policy-content {
     padding: 24px;
+  }
+
+  .game-slider-container {
+    margin: 0 -8px;
+  }
+
+  .game-slider-prev {
+    left: 8px;
+  }
+
+  .game-slider-next {
+    right: 8px;
+  }
+
+  .game-slider-btn {
+    width: 40px;
+    height: 40px;
   }
 
   .footer-inner {
@@ -789,6 +978,19 @@ ul, ol {
     display: none;
   }
 
+  .game-slider-btn {
+    width: 34px;
+    height: 34px;
+  }
+
+  .game-slider-prev {
+    left: 4px;
+  }
+
+  .game-slider-next {
+    right: 4px;
+  }
+
   .team-card {
     flex: 0 0 220px;
   }
@@ -806,6 +1008,7 @@ ul, ol {
     opacity: 0;
     transform: translateY(24px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -813,10 +1016,60 @@ ul, ol {
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
 }
 
 .animate-float {
   animation: float 3s ease-in-out infinite;
+}
+
+/* ============================================
+   GAME START BUTTON (게임 시작 버튼)
+   ============================================ */
+.game-action-area {
+  text-align: center;
+  margin-top: 40px;
+  margin-bottom: 20px;
+}
+
+.game-page-btn {
+  display: inline-block;
+  padding: 16px 48px;
+  background-color: var(--bg-footer);
+  /* 곰돌이 테마의 갈색 */
+  color: var(--text-on-dark);
+  text-decoration: none;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 1.2rem;
+  box-shadow: var(--shadow-medium);
+  transition: all var(--transition-normal);
+  cursor: pointer;
+  border: none;
+}
+
+.game-page-btn:hover {
+  background-color: var(--accent-coral);
+  /* 마우스 올리면 코랄색으로 변경 */
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+  color: #fff;
+}
+
+/* 모바일 화면 대응 */
+@media (max-width: 768px) {
+  .game-page-btn {
+    width: 100%;
+    max-width: 280px;
+    padding: 14px 30px;
+    font-size: 1.1rem;
+  }
 }
